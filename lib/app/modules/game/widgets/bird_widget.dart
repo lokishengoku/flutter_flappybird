@@ -11,9 +11,9 @@ class BirdWidget extends StatelessWidget {
       duration: const Duration(milliseconds: 0),
       alignment: Alignment(0, bird.y),
       child: RotationTransition(
-        turns: AlwaysStoppedAnimation(bird.isFlyUp ? 1 / 6 : -1 / 4),
-        child: Container(
-          color: Colors.red,
+        turns: AlwaysStoppedAnimation(bird.rotate),
+        child: Image.asset(
+          'assets/images/bird.png',
           width: 50,
           height: 50,
         ),

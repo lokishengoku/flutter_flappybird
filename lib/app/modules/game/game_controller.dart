@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flappybird/app/data/models/bird.dart';
-import 'package:flappybird/app/data/utils/accelerator.dart';
+import 'package:flappybird/app/data/utils/bird_airlines.dart';
 import 'package:flappybird/app/data/utils/constants.dart';
 import 'package:get/get.dart';
 
@@ -22,7 +22,11 @@ class GameController extends GetxController {
     update();
     Timer.periodic(const Duration(milliseconds: 40), (timer) {
       time += Constants.timeStep;
-      bird.y = Accelerator.getMovement(birdFlyPosition, time);
+      final lastY = bird.y;
+      bird.y = BirdAirlines.getY(birdFlyPosition, time);
+
+      bird.rotate = BirdAirlines.getRotation(bird.y, lastY, time);
+
       update();
       if (_gameOver()) {
         print('game over');
