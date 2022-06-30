@@ -7,7 +7,7 @@ class ScreenInfo {
 
   static void init() {
     screenWidth = MediaQuery.of(Get.context!).size.width;
-    screenHeight = MediaQuery.of(Get.context!).size.height;
+    screenHeight = MediaQuery.of(Get.context!).size.height - 50;
   }
 
   static double percentOfWidth(double w) => w / screenWidth;

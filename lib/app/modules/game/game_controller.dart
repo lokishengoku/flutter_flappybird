@@ -1,35 +1,44 @@
 import 'dart:async';
 
 import 'package:flappybird/app/data/models/bird.dart';
+import 'package:flappybird/app/data/models/pipe.dart';
 import 'package:flappybird/app/data/utils/bird_airlines.dart';
 import 'package:flappybird/app/data/utils/constants.dart';
+import 'package:flappybird/app/data/utils/pipe_builder.dart';
+import 'package:flappybird/app/data/utils/screen_info.dart';
 import 'package:get/get.dart';
 
 class GameController extends GetxController {
-  final bird = Bird();
-
-  double time = Constants.defaultTime;
-  double birdFlyPosition = Constants.defaultY;
+  var time = Constants.defaultTime;
+  var birdFlyPosition = Constants.defaultY;
   var gameState = GameState.ready;
+  var difficultyPipesSpace = 11;
+  final rightPipeX = ScreenInfo.percentOfWidth(Constants.pipeW) * 2 * 0.95;
+  final leftPipeX = -ScreenInfo.percentOfWidth(Constants.pipeW) * 2 * 0.95;
+  final bird = Bird();
+  final List<Pipe> pipes = [];
 
   @override
-  onReady() {
+  void onReady() {
+    pipes.addAll([
+      PipeBuilder.build(difficultyPipesSpace, Constants.startPipeX),
+      PipeBuilder.build(
+          difficultyPipesSpace, Constants.startPipeX + Constants.pipesSpace),
+      PipeBuilder.build(difficultyPipesSpace,
+          Constants.startPipeX + Constants.pipesSpace * 2),
+      PipeBuilder.build(difficultyPipesSpace,
+          Constants.startPipeX + Constants.pipesSpace * 3),
+    ]);
     update();
+    super.onReady();
   }
 
   startGame() {
     gameState = GameState.playing;
     update();
-    Timer.periodic(const Duration(milliseconds: 40), (timer) {
-      time += Constants.timeStep;
-      final lastY = bird.y;
-      bird.y = BirdAirlines.getY(birdFlyPosition, time);
-
-      bird.rotate = BirdAirlines.getRotation(bird.y, lastY, time);
-
-      update();
+    Timer.periodic(const Duration(milliseconds: 20), (timer) {
+      _moveObjects();
       if (_gameOver()) {
-        print('game over');
         timer.cancel();
         gameState = GameState.over;
         update();
@@ -49,6 +58,27 @@ class GameController extends GetxController {
     }
   }
 
+  _moveObjects() {
+    time += Constants.timeStep;
+
+    // move bird
+    final lastY = bird.y;
+    bird.y = BirdAirlines.getY(birdFlyPosition, time);
+    bird.rotate = BirdAirlines.getRotation(bird.y, lastY, time);
+
+    // move pipes
+    for (int i = 0; i < pipes.length; i++) {
+      final previousPipe = pipes[i == 0 ? pipes.length - 1 : i - 1];
+      pipes[i].x -= Constants.pipeStep;
+
+      if (pipes[i].x <= Constants.insertPipeX) {
+        pipes[i].x = previousPipe.x + Constants.pipesSpace;
+      }
+    }
+
+    update();
+  }
+
   _fly() {
     time = Constants.defaultTime;
     birdFlyPosition = bird.y;
@@ -56,7 +86,26 @@ class GameController extends GetxController {
   }
 
   _gameOver() {
-    return bird.y >= 0.9;
+    final bottomBirdY =
+        bird.y + ScreenInfo.percentOfHeight(Constants.birdH) * 0.9;
+
+    // Bird touches ground
+    if (bottomBirdY >= 1) return true;
+
+    // Bird touches cloud
+    if (bird.y <= -0.95) return true;
+
+    // Bird touches pipe
+    final midPipe = pipes.firstWhereOrNull(
+        (pipe) => pipe.x >= leftPipeX && pipe.x <= rightPipeX);
+    if (midPipe != null) {
+      print('${bird.y} | $bottomBirdY | ${midPipe.yTop} | ${midPipe.yBottom}');
+      // Bird touches bottom pipe
+      if (bottomBirdY >= midPipe.yBottom) return true;
+      // Bird touches top pipe
+      if (bird.y <= midPipe.yTop) return true;
+    }
+    return false;
   }
 }
 

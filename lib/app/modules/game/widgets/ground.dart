@@ -5,11 +5,10 @@ class Ground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        width: double.infinity,
-        color: Colors.brown[300],
-      ),
+    return Container(
+      width: double.infinity,
+      height: 50,
+      color: Colors.grey[700],
     );
   }
 }

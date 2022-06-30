@@ -1,5 +1,6 @@
 import 'package:flappybird/app/modules/game/game_controller.dart';
 import 'package:flappybird/app/modules/game/widgets/bird_widget.dart';
+import 'package:flappybird/app/modules/game/widgets/pipe_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +14,12 @@ class Sky extends StatelessWidget {
       child: Container(
         width: double.infinity,
         height: double.infinity,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/sky.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: GetBuilder<GameController>(builder: (controller) {
           return InkWell(
             onTap: controller.onTapSky,
@@ -21,6 +28,7 @@ class Sky extends StatelessWidget {
                 BirdWidget(
                   bird: controller.bird,
                 ),
+                ...controller.pipes.map((e) => PipeWidget(pipe: e)),
               ],
             ),
           );

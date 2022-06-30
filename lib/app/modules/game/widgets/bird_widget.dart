@@ -1,4 +1,5 @@
 import 'package:flappybird/app/data/models/bird.dart';
+import 'package:flappybird/app/data/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class BirdWidget extends StatelessWidget {
@@ -14,8 +15,8 @@ class BirdWidget extends StatelessWidget {
         turns: AlwaysStoppedAnimation(bird.rotate),
         child: Image.asset(
           'assets/images/bird.png',
-          width: 50,
-          height: 50,
+          width: Constants.birdW,
+          height: Constants.birdH,
         ),
       ),
     );
