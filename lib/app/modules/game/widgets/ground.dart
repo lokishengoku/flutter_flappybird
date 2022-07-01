@@ -6,9 +6,14 @@ class Ground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage('assets/images/ground.jpeg'),
+            fit: BoxFit.fitWidth,
+            alignment: Alignment.topCenter),
+      ),
       width: double.infinity,
       height: 50,
-      color: Colors.grey[700],
     );
   }
 }
