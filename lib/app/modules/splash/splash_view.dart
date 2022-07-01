@@ -9,14 +9,32 @@ class SplashView extends GetView<SplashController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.green[400],
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/splash_background.jpeg'),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Center(
-          child: Text(
-            'Flappy Bird',
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.white,
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/bird.png',
+                width: 60,
+                height: 60,
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(height: 25),
+              Text(
+                'flappy bird',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
+              ),
+            ],
           ),
         ),
       ),

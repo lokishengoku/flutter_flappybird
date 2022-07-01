@@ -99,7 +99,7 @@ class GameController extends GetxController {
     final midPipe = pipes.firstWhereOrNull(
         (pipe) => pipe.x >= leftPipeX && pipe.x <= rightPipeX);
     if (midPipe != null) {
-      print('${bird.y} | $bottomBirdY | ${midPipe.yTop} | ${midPipe.yBottom}');
+      // print('${bird.y} | $bottomBirdY | ${midPipe.yTop} | ${midPipe.yBottom}');
       // Bird touches bottom pipe
       if (bottomBirdY >= midPipe.yBottom) return true;
       // Bird touches top pipe
