@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flappybird/app/data/models/pipe.dart';
 import 'package:flappybird/app/data/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -13,13 +15,7 @@ class PipeWidget extends StatelessWidget {
       alignment: Alignment(pipe.x, 0),
       child: Column(
         children: [
-          Expanded(
-            flex: pipe.flexTop,
-            child: Container(
-              width: Constants.pipeW,
-              color: Colors.green,
-            ),
-          ),
+          _topPipe(),
           Expanded(
             flex: pipe.space,
             child: Container(
@@ -27,11 +23,54 @@ class PipeWidget extends StatelessWidget {
               color: Colors.transparent,
             ),
           ),
+          _bottomPipe(),
+        ],
+      ),
+    );
+  }
+
+  Expanded _topPipe() {
+    return Expanded(
+      flex: pipe.flexTop,
+      child: Column(
+        children: [
           Expanded(
-            flex: pipe.flexBottom,
-            child: Container(
+            child: SizedBox(
+              child: Image.asset(
+                'assets/images/pipe-body.png',
+                width: Constants.pipeW,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Transform.rotate(
+            angle: -pi,
+            child: Image.asset(
+              'assets/images/pipe-head.png',
+              width: Constants.pipeW * 1.1,
+              fit: BoxFit.fitWidth,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Expanded _bottomPipe() {
+    return Expanded(
+      flex: pipe.flexBottom,
+      child: Column(
+        children: [
+          Image.asset(
+            'assets/images/pipe-head.png',
+            width: Constants.pipeW * 1.1,
+            fit: BoxFit.fitWidth,
+          ),
+          Expanded(
+            child: Image.asset(
+              'assets/images/pipe-body.png',
               width: Constants.pipeW,
-              color: Colors.green,
+              fit: BoxFit.cover,
             ),
           ),
         ],
