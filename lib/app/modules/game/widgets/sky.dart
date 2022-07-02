@@ -1,6 +1,7 @@
 import 'package:flappybird/app/modules/game/game_controller.dart';
 import 'package:flappybird/app/modules/game/widgets/bird_widget.dart';
 import 'package:flappybird/app/modules/game/widgets/pipe_widget.dart';
+import 'package:flappybird/app/modules/game/widgets/score.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -29,6 +30,7 @@ class Sky extends StatelessWidget {
                   bird: controller.bird,
                 ),
                 ...controller.pipes.map((e) => PipeWidget(pipe: e)),
+                Score(score: controller.score),
               ],
             ),
           );

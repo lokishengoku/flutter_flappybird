@@ -12,6 +12,7 @@ class GameController extends GetxController {
   var time = Constants.defaultTime;
   var birdFlyPosition = Constants.defaultY;
   var gameState = GameState.ready;
+  var score = 0;
   var difficultyPipesSpace = 11;
   final rightPipeX = ScreenInfo.percentOfWidth(Constants.pipeW) * 2 * 0.95;
   final leftPipeX = -ScreenInfo.percentOfWidth(Constants.pipeW) * 2 * 0.95;
@@ -35,6 +36,7 @@ class GameController extends GetxController {
 
   startGame() {
     gameState = GameState.playing;
+    score = 0;
     update();
     Timer.periodic(const Duration(milliseconds: 20), (timer) {
       _moveObjects();
@@ -69,7 +71,10 @@ class GameController extends GetxController {
     // move pipes
     for (int i = 0; i < pipes.length; i++) {
       final previousPipe = pipes[i == 0 ? pipes.length - 1 : i - 1];
+      final oldPipePos = pipes[i].x;
       pipes[i].x -= Constants.pipeStep;
+
+      if (oldPipePos > 0 && pipes[i].x < 0) score++;
 
       if (pipes[i].x <= Constants.insertPipeX) {
         pipes[i].x = previousPipe.x + Constants.pipesSpace;
