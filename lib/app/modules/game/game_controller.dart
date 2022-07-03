@@ -13,7 +13,7 @@ class GameController extends GetxController {
   var birdFlyPosition = Constants.defaultY;
   var gameState = GameState.ready;
   var score = 0;
-  var difficultyPipesSpace = 11;
+  var difficultyPipesSpace = Constants.defaultDifficultySpace;
   final rightPipeX = ScreenInfo.percentOfWidth(Constants.pipeW) * 2 * 0.95;
   final leftPipeX = -ScreenInfo.percentOfWidth(Constants.pipeW) * 2 * 0.95;
   final bird = Bird();
@@ -21,23 +21,11 @@ class GameController extends GetxController {
 
   @override
   void onReady() {
-    pipes.addAll([
-      PipeBuilder.build(difficultyPipesSpace, Constants.startPipeX),
-      PipeBuilder.build(
-          difficultyPipesSpace, Constants.startPipeX + Constants.pipesSpace),
-      PipeBuilder.build(difficultyPipesSpace,
-          Constants.startPipeX + Constants.pipesSpace * 2),
-      PipeBuilder.build(difficultyPipesSpace,
-          Constants.startPipeX + Constants.pipesSpace * 3),
-    ]);
-    update();
+    _initGame();
     super.onReady();
   }
 
   startGame() {
-    gameState = GameState.playing;
-    score = 0;
-    update();
     Timer.periodic(const Duration(milliseconds: 20), (timer) {
       _moveObjects();
       if (_gameOver()) {
@@ -48,10 +36,31 @@ class GameController extends GetxController {
     });
   }
 
+  _initGame() {
+    gameState = GameState.playing;
+    score = 0;
+    time = 0;
+    difficultyPipesSpace = Constants.defaultDifficultySpace;
+    pipes.clear();
+    pipes.addAll([
+      PipeBuilder.build(difficultyPipesSpace, Constants.startPipeX),
+      PipeBuilder.build(
+          difficultyPipesSpace, Constants.startPipeX + Constants.pipesSpace),
+      PipeBuilder.build(difficultyPipesSpace,
+          Constants.startPipeX + Constants.pipesSpace * 2),
+      PipeBuilder.build(difficultyPipesSpace,
+          Constants.startPipeX + Constants.pipesSpace * 3),
+    ]);
+    update();
+  }
+
   onTapSky() {
     switch (gameState) {
       case GameState.ready:
+        startGame();
+        break;
       case GameState.over:
+        _initGame();
         startGame();
         break;
       case GameState.playing:

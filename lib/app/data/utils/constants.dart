@@ -9,6 +9,7 @@ class Constants {
   static const defaultY = 0.0;
   static const defaultTime = 0.0;
   static const timeStep = 0.02;
+  static const defaultDifficultySpace = 11;
   static const defaultRotate = 0.0;
   static const startPipeX = 2.0;
   static const insertPipeX = -2.0;
