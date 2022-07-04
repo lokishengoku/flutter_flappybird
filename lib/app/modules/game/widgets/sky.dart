@@ -1,5 +1,6 @@
 import 'package:flappybird/app/modules/game/game_controller.dart';
 import 'package:flappybird/app/modules/game/widgets/bird_widget.dart';
+import 'package:flappybird/app/modules/game/widgets/game_over_widget.dart';
 import 'package:flappybird/app/modules/game/widgets/pipe_widget.dart';
 import 'package:flappybird/app/modules/game/widgets/score.dart';
 import 'package:flappybird/app/modules/game/widgets/tap_to_start_widget.dart';
@@ -33,6 +34,12 @@ class Sky extends StatelessWidget {
                 ...controller.pipes.map((e) => PipeWidget(pipe: e)),
                 Score(score: controller.score),
                 if (controller.gameState == GameState.ready) TapToStartWidget(),
+                if (controller.gameState == GameState.over)
+                  GameOverWidget(
+                    highestScore: 10,
+                    score: controller.score,
+                    onReplay: controller.onReplay,
+                  ),
               ],
             ),
           );

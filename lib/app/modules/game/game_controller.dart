@@ -31,9 +31,9 @@ class GameController extends GetxController {
     Timer.periodic(const Duration(milliseconds: 20), (timer) {
       _moveObjects();
       if (_gameOver()) {
-        timer.cancel();
         gameState = GameState.over;
         update();
+        timer.cancel();
       }
     });
   }
@@ -41,8 +41,10 @@ class GameController extends GetxController {
   _initGame() {
     gameState = GameState.ready;
     score = 0;
-    time = 0;
+    time = Constants.defaultTime;
+    birdFlyPosition = Constants.defaultY;
     difficultyPipesSpace = Constants.defaultDifficultySpace;
+    bird.reset();
     pipes.clear();
     pipes.addAll([
       PipeBuilder.build(difficultyPipesSpace, Constants.startPipeX),
@@ -62,13 +64,15 @@ class GameController extends GetxController {
         startGame();
         break;
       case GameState.over:
-        _initGame();
-        startGame();
         break;
       case GameState.playing:
         _fly();
         break;
     }
+  }
+
+  onReplay() {
+    _initGame();
   }
 
   _moveObjects() {
@@ -102,15 +106,15 @@ class GameController extends GetxController {
   }
 
   _gameOver() {
-    final topBirdY = bird.y - ScreenInfo.percentOfHeight(Constants.birdH) * 0.8;
+    final topBirdY = bird.y - ScreenInfo.percentOfHeight(Constants.birdH) * 0.9;
     final bottomBirdY =
-        bird.y + ScreenInfo.percentOfHeight(Constants.birdH) * 0.8;
+        bird.y + ScreenInfo.percentOfHeight(Constants.birdH) * 0.9;
 
     // Bird touches ground
     if (bottomBirdY >= 1) return true;
 
     // Bird touches cloud
-    if (bird.y <= -1) return true;
+    if (topBirdY <= -1) return true;
 
     // Bird touches pipe
     final midPipe = pipes.firstWhereOrNull(
