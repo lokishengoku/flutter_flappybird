@@ -28,7 +28,7 @@ class GameController extends GetxController {
   startGame() {
     gameState = GameState.playing;
     update();
-    Timer.periodic(const Duration(milliseconds: 20), (timer) {
+    Timer.periodic(const Duration(milliseconds: 17), (timer) {
       _moveObjects();
       if (_gameOver()) {
         gameState = GameState.over;
@@ -89,10 +89,16 @@ class GameController extends GetxController {
       final oldPipePos = pipes[i].x;
       pipes[i].x -= Constants.pipeStep;
 
-      if (oldPipePos > 0 && pipes[i].x < 0) score++;
+      if (oldPipePos > 0 && pipes[i].x < 0) {
+        score++;
+        if (score % 5 == 0 && difficultyPipesSpace > 1) {
+          difficultyPipesSpace--;
+        }
+      }
 
       if (pipes[i].x <= Constants.insertPipeX) {
         pipes[i].x = previousPipe.x + Constants.pipesSpace;
+        pipes[i].space = difficultyPipesSpace;
       }
     }
 
