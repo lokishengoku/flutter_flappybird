@@ -26,6 +26,8 @@ class GameController extends GetxController {
   }
 
   startGame() {
+    gameState = GameState.playing;
+    update();
     Timer.periodic(const Duration(milliseconds: 20), (timer) {
       _moveObjects();
       if (_gameOver()) {
@@ -37,7 +39,7 @@ class GameController extends GetxController {
   }
 
   _initGame() {
-    gameState = GameState.playing;
+    gameState = GameState.ready;
     score = 0;
     time = 0;
     difficultyPipesSpace = Constants.defaultDifficultySpace;
@@ -100,14 +102,15 @@ class GameController extends GetxController {
   }
 
   _gameOver() {
+    final topBirdY = bird.y - ScreenInfo.percentOfHeight(Constants.birdH) * 0.8;
     final bottomBirdY =
-        bird.y + ScreenInfo.percentOfHeight(Constants.birdH) * 0.9;
+        bird.y + ScreenInfo.percentOfHeight(Constants.birdH) * 0.8;
 
     // Bird touches ground
     if (bottomBirdY >= 1) return true;
 
     // Bird touches cloud
-    if (bird.y <= -0.95) return true;
+    if (bird.y <= -1) return true;
 
     // Bird touches pipe
     final midPipe = pipes.firstWhereOrNull(
@@ -117,7 +120,7 @@ class GameController extends GetxController {
       // Bird touches bottom pipe
       if (bottomBirdY >= midPipe.yBottom) return true;
       // Bird touches top pipe
-      if (bird.y <= midPipe.yTop) return true;
+      if (topBirdY <= midPipe.yTop) return true;
     }
     return false;
   }
